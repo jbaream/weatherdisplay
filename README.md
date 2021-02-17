@@ -1,4 +1,4 @@
-# weatherdisplay
+# Weather Display
 WeatherDisplay application for LILYGO TTGO T5 e-ink board
 
 This application will query openweather api for forecast and display it on the e-ink display.
