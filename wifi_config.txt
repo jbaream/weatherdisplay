@@ -1,0 +1,13 @@
+{
+	"ssid": "your_wifi_ssid",
+	"password": "your_wifi_password",
+	"apikey": "your_openweather_api_key",
+	"server": "api.openweathermap.org",
+	"City": "Your_City e.g. Moscow",
+	"Country": "Country 2 letters ISO code e.g. RU",
+	"Language": "Language 2 letters ISO code e.g. RU",
+	"Hemisphere": "north or south",
+	"Units": "M - metric, any other - imperial",
+	"Timezone": "e.g. MSK-3",
+	"ntpServer": "e.g. 0.ru.pool.ntp.org",
+}
