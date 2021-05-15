@@ -32,6 +32,6 @@ typedef struct { // For current Day and Day 1, 2, 3, etc
   int      Sunrise;
   int      Sunset;
   int      Timezone;
-} Forecast_record_type;
+} ForecastRecord;
 
 #endif /* ifndef FORECAST_RECORD_H_ */
