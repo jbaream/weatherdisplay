@@ -2,6 +2,7 @@
 #define DRAW_FUNCTIONS_H_
 
 #include "common.h"
+#include "system.h"
 #include "display.h"
 #include "lang.h"
 
@@ -299,24 +300,21 @@ void draw_battery(const int x, int y)
   float maxLiPoV = 4.1;
   float percentage = 1.0;
   // analog value = Vbat / 2
-  int voltageRaw = 0;
-  for (int i = 0; i < 10; i++)
-  {
-    voltageRaw += analogRead(35);
-    delay(10);
-  }
-  voltageRaw /= 10;
+  float voltageRaw = read_battery_voltage();
   // voltage = divider * V_ref / Max_Analog_Value
-  float voltage = VOLTAGE_DIVIDER_RATIO * voltageRaw / 4096.0;
+  float voltage = VOLTAGE_DIVIDER_RATIO * voltageRaw / 4095.0;
   if (voltage > 1)
   { // Only display if there is a valid reading
     Serial.println("Voltage Raw = " + String(voltageRaw));
     Serial.println("Voltage = " + String(voltage));
-    percentage = (voltage - minLiPoV) / (maxLiPoV - minLiPoV);
+    
     if (voltage >= maxLiPoV)
       percentage = 1;
-    if (voltage <= minLiPoV)
+    else if (voltage <= minLiPoV)
       percentage = 0;
+    else
+      percentage = (voltage - minLiPoV) / (maxLiPoV - minLiPoV);
+      
     display.drawRect(x, y - 12, 19, 10, FG_COLOR);
     display.fillRect(x + 2, y - 10, 15 * percentage, 6, FG_COLOR);
     display.setFont(&DEFALUT_FONT);
@@ -326,7 +324,6 @@ void draw_battery(const int x, int y)
     } else {
       draw_string(x + 21, y - 4, String(voltage, 1) + "v", LEFT);
     }
-    
   }
 }
 
