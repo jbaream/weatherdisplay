@@ -8,6 +8,37 @@
 #include "display.h"
 #include "lang.h"
 
+#define FLASH_CS_PIN 11
+#define BUILTIN_LED_PIN 19
+#define VOLTAGE_PIN 35
+
+void setup_pins()
+{
+  pinMode(BUILTIN_LED_PIN, OUTPUT);
+  pinMode(FLASH_CS_PIN, OUTPUT);
+  pinMode(VOLTAGE_PIN, INPUT);
+}
+
+void led_on()
+{
+  digitalWrite(BUILTIN_LED_PIN, HIGH);
+}
+
+void led_off()
+{
+  digitalWrite(BUILTIN_LED_PIN, LOW);
+}
+
+void enable_flash_memory()
+{
+  digitalWrite(FLASH_CS_PIN, LOW);
+}
+
+void disable_flash_memory()
+{
+  digitalWrite(FLASH_CS_PIN, HIGH);
+}
+
 uint8_t start_wifi()
 {
   Serial.print("\r\nConnecting to: ");
@@ -59,21 +90,13 @@ void begin_sleep()
   display_power_off();
   long SleepTimer = (SLEEP_DURATION_MIN * 60 - ((CurrentMin % SLEEP_DURATION_MIN) * 60 + CurrentSec)); //Some ESP32 are too fast to maintain accurate time
   esp_sleep_enable_timer_wakeup((SleepTimer + 20) * 1000000LL);                                        // Added 20-sec extra delay to cater for slow ESP32 RTC timers
-#ifdef BUILTIN_LED
-  pinMode(BUILTIN_LED, INPUT); // If it's On, turn it off and some boards use GPIO-5 for SPI-SS, which remains low after screen use
-  digitalWrite(BUILTIN_LED, LOW);
-#endif
 
-  // Disable Flash memory
-  digitalWrite(FLASH_CS_PIN, HIGH);
-  gpio_deep_sleep_hold_en();
+  Serial.println("INFO: Entering " + String(SleepTimer) + "-secs of sleep time");
+  Serial.println("INFO: Awake for : " + String((millis() - StartTime) / 1000.0, 3) + "-secs");
+  Serial.println("INFO: Starting deep-sleep period...");
 
-  Serial.println("Entering " + String(SleepTimer) + "-secs of sleep time");
-  Serial.println("Awake for : " + String((millis() - StartTime) / 1000.0, 3) + "-secs");
-  Serial.println("Starting deep-sleep period...");
   gpio_deep_sleep_hold_en();
   esp_deep_sleep_start(); // Sleep for e.g. 30 minutes
-  
 }
 
 bool update_local_time()
@@ -121,6 +144,18 @@ bool setup_time()
   tzset();                                                              // Set the TZ environment variable
   delay(100);
   return update_local_time();
+}
+
+float read_battery_voltage()
+{
+  float voltageRaw = 0;
+  for (int i = 0; i < 10; i++)
+  {
+    voltageRaw += analogRead(VOLTAGE_PIN);
+    delay(10);
+  }
+  voltageRaw /= 10;
+  return voltageRaw;
 }
 
 #endif //SYSTEM_H_

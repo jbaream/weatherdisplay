@@ -23,14 +23,11 @@ void setup()
 {
   StartTime = millis();
   Serial.begin(115200);
-  #ifdef BUILTIN_LED
-  pinMode(BUILTIN_LED, OUTPUT); // If it's On, turn it off and some boards use GPIO-5 for SPI-SS, which remains low after screen use
-  digitalWrite(BUILTIN_LED, HIGH);
-  #endif
-  // Enable flash memory
-  pinMode(FLASH_CS_PIN, OUTPUT);
-  digitalWrite(FLASH_CS_PIN, LOW);
-
+  setup_pins();
+  
+  led_on();
+  enable_flash_memory();
+  
   Config::read();
   Serial.println("Serial OK, connecting Wi-Fi");
   if (start_wifi() == WL_CONNECTED && setup_time() == true)
@@ -56,6 +53,9 @@ void setup()
     }
     //}
   }
+  led_off();
+  disable_flash_memory();
+
   begin_sleep();
 }
 
