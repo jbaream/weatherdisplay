@@ -3,6 +3,7 @@
 
 #include "common.h"
 #include "display.h"
+#include "lang.h"
 
 bool LargeIcon = true,
      SmallIcon = false;

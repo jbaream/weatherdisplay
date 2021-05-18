@@ -1,3 +1,6 @@
+#ifndef LANG_H_
+#define LANG_H_
+
 #define FONT(x) x##_tf
 
 //Temperature - Humidity - Forecast
@@ -70,3 +73,4 @@ const char* weekday_D[] = { "Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat" };
 //Month
 const char* month_M[] = { "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec" };
 
+#endif //LANG_H_

@@ -8,6 +8,8 @@
 #define WAKEUP_TIME_HR      7   // Don't wakeup until after this hour to save battery power
 #define SLEEP_TIME_HR       23  // Sleep after this hour to save battery power
 
+#define FLASH_CS_PIN        11
+
 #define SHOW_PERCENT_VOLTAGE true
 #define BUILTIN_LED 19
 #define VOLTAGE_DIVIDER_RATIO 6.86 //7.0 Varies from board to board
